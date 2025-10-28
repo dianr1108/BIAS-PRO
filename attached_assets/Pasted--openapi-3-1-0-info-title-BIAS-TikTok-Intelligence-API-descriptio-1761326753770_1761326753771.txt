@@ -1,0 +1,95 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "BIAS TikTok Intelligence API",
+    "description": "Public API for TikTok creator analysis, trending data, competitor intelligence, and live stream analytics",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://bias23.replit.app",
+      "description": "Main API Server"
+    }
+  ],
+  "paths": {
+    "/api/analyze": {
+      "get": {
+        "operationId": "analyzeProfile",
+        "summary": "Analyze TikTok creator profile",
+        "description": "Get comprehensive behavioral analysis of a TikTok creator including 8-layer scoring, insights, and governance metrics",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "@newsmaker23_talk"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful analysis"
+          }
+        }
+      }
+    },
+    "/api/trends": {
+      "get": {
+        "operationId": "getTrends",
+        "summary": "Get trending TikTok sounds and hashtags",
+        "description": "Retrieve current trending sounds and hashtags",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/api/competitors": {
+      "get": {
+        "operationId": "getCompetitors",
+        "summary": "Get competitor analysis data",
+        "description": "Retrieve competitor intelligence for a specific TikTok account",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/api/live": {
+      "get": {
+        "operationId": "getLiveStreams",
+        "summary": "Get live stream analytics",
+        "description": "Retrieve live stream performance data",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    }
+  }
+}
