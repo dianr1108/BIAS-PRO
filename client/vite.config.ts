@@ -1,14 +1,16 @@
 import { defineConfig } from 'vite'
-import path from 'node:path'
 
 export default defineConfig({
   root: '.',
-  resolve: {
-    alias: {
-      '/src': path.resolve(__dirname, 'src'),
-      'src': path.resolve(__dirname, 'src'),
+  plugins: [
+    {
+      // Paksa perbaiki path absolut di index.html ("/src/...") jadi relatif ("./src/...")
+      name: 'fix-absolute-src-in-index',
+      transformIndexHtml(html) {
+        return html.replace(/src\s*=\s*["']\s*\/src\//g, 'src="./src/');
+      }
     }
-  },
+  ],
   build: {
     outDir: '../dist/public',
     emptyOutDir: true
