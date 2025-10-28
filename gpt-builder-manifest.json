@@ -1,0 +1,250 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "BIAS - TikTok Intelligence",
+  "name_for_model": "bias_tiktok_api",
+  "description_for_human": "Analyze TikTok creators with 8-layer behavioral scoring, trending sounds, competitor intelligence, and live stream analytics. Get actionable insights for growth strategies.",
+  "description_for_model": "BIAS (Behavioral Intelligence Audit System) provides comprehensive TikTok creator analysis. Use this API to analyze profiles, get trending sounds/hashtags, compare competitors, and review live stream performance. Always use the 'analyze' function first when users ask about a TikTok creator. Provide insights in a casual, friendly Indonesian tone (Bahasa Indonesia) unless asked otherwise.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://bias23.replit.app",
+    "is_user_authenticated": false
+  },
+  "logo_url": "https://bias23.replit.app/logo.png",
+  "contact_email": "support@bias23.replit.app",
+  "legal_info_url": "https://bias23.replit.app",
+  "openapi_spec": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "BIAS TikTok Intelligence API",
+      "description": "Public API for TikTok creator analysis, trending data, competitor intelligence, and live stream analytics",
+      "version": "1.0.0"
+    },
+    "servers": [
+      {
+        "url": "https://bias23.replit.app"
+      }
+    ],
+    "paths": {
+      "/api/analyze": {
+        "get": {
+          "operationId": "analyzeProfile",
+          "summary": "Analyze TikTok creator profile",
+          "description": "Get comprehensive behavioral analysis of a TikTok creator including 8-layer scoring, insights, and governance metrics",
+          "parameters": [
+            {
+              "name": "username",
+              "in": "query",
+              "description": "TikTok username (with or without @ symbol)",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "example": "@newsmaker23_talk"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful analysis",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "username": {
+                        "type": "string"
+                      },
+                      "profile": {
+                        "type": "object",
+                        "properties": {
+                          "nickname": { "type": "string" },
+                          "bio": { "type": "string" },
+                          "followers": { "type": "number" },
+                          "following": { "type": "number" },
+                          "videos": { "type": "number" },
+                          "total_likes": { "type": "number" },
+                          "likes_per_video": { "type": "number" },
+                          "engagement_rate": { "type": "number" },
+                          "is_verified": { "type": "boolean" }
+                        }
+                      },
+                      "layers": {
+                        "type": "object",
+                        "properties": {
+                          "VBM": { "type": "number", "description": "Visual Behavioral Metrics (0-100)" },
+                          "ABM": { "type": "number", "description": "Audio Behavioral Metrics (0-100)" },
+                          "BIFS": { "type": "number", "description": "Behavioral Interaction & Follower Signals (0-100)" },
+                          "EPM": { "type": "number", "description": "Engagement & Participation Metrics (0-100)" },
+                          "NLP": { "type": "number", "description": "Natural Language Processing (0-100)" },
+                          "BRM": { "type": "number", "description": "Brand Relevance Metrics (0-100)" },
+                          "EnvTech": { "type": "number", "description": "Environmental & Technical Metrics (0-100)" },
+                          "BMIL": { "type": "number", "description": "Bot/Manipulation Integrity Level (0-100)" }
+                        }
+                      },
+                      "insights": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      },
+                      "governance": {
+                        "type": "object",
+                        "properties": {
+                          "score": { "type": "number" },
+                          "alerts": { "type": "array", "items": { "type": "string" } },
+                          "bot_detection": { "type": "number" },
+                          "brand_safety": { "type": "string", "enum": ["high", "medium", "low"] }
+                        }
+                      },
+                      "ai_summary": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/trends": {
+        "get": {
+          "operationId": "getTrends",
+          "summary": "Get trending TikTok sounds and hashtags",
+          "description": "Retrieve current trending sounds and hashtags with viral scores, growth velocity, and opportunity levels",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "success": { "type": "boolean" },
+                      "trends": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "type": { "type": "string", "enum": ["sound", "hashtag"] },
+                            "name": { "type": "string" },
+                            "category": { "type": "string" },
+                            "viral_score": { "type": "number" },
+                            "growth_velocity": { "type": "number" },
+                            "saturation_level": { "type": "number" },
+                            "peak_prediction": { "type": "number" },
+                            "best_posting_times": { "type": "array", "items": { "type": "string" } },
+                            "top_creators": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "username": { "type": "string" },
+                                  "followers": { "type": "number" }
+                                }
+                              }
+                            },
+                            "opportunity_level": { "type": "string" }
+                          }
+                        }
+                      },
+                      "total": { "type": "number" },
+                      "last_updated": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/competitors": {
+        "get": {
+          "operationId": "getCompetitors",
+          "summary": "Get competitor analysis data",
+          "description": "Retrieve competitor intelligence and comparison data for a specific TikTok account",
+          "parameters": [
+            {
+              "name": "username",
+              "in": "query",
+              "description": "Main TikTok username to get competitors for",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "example": "@newsmaker23_talk"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "competitors": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      },
+                      "total_analyzed": { "type": "number" },
+                      "last_updated": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/live": {
+        "get": {
+          "operationId": "getLiveStreams",
+          "summary": "Get live stream analytics",
+          "description": "Retrieve live stream performance data and analytics for a TikTok creator",
+          "parameters": [
+            {
+              "name": "username",
+              "in": "query",
+              "description": "TikTok username to get live stream data for",
+              "required": true,
+              "schema": {
+                "type": "string"
+              },
+              "example": "@newsmaker23_talk"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "username": { "type": "string" },
+                      "live_streams": {
+                        "type": "array",
+                        "items": {
+                          "type": "object"
+                        }
+                      },
+                      "total_analyzed": { "type": "number" },
+                      "last_updated": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "instructions_for_gpt": "You are BIAS AI, a TikTok intelligence assistant specializing in creator analysis. When users ask about TikTok accounts:\n\n1. Use analyzeProfile() to get comprehensive behavioral analysis\n2. Interpret the 8 layers: VBM (visual), ABM (audio), BIFS (energy), EPM (interaction), NLP (linguistic), BRM (contextual), EnvTech (environmental), BMIL (governance)\n3. Use getTrends() to recommend trending sounds/hashtags\n4. Use getCompetitors() and getLiveStreams() when available\n5. Provide insights in casual Indonesian (Bahasa Indonesia) unless asked in English\n6. Focus on actionable recommendations, not just numbers\n7. Explain scores in simple terms (80+ = excellent, 60-79 = good, 40-59 = average, <40 = needs improvement)\n8. Always mention governance/bot detection if BMIL < 70\n9. Give growth strategies based on weak layers\n10. Be friendly, supportive, and motivating\n\nExample response style:\n'Wah @username punya 50K followers dengan engagement rate 1.2% - ini BAGUS! 🔥 Visual score 85 menunjukkan kualitas video udah oke banget. Tapi interaction score 45 agak rendah - coba lebih aktif reply komentar dan bikin konten yang encourage engagement ya!'"
+}

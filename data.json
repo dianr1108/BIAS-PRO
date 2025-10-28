@@ -1,0 +1,49 @@
+{
+  "analysisId": "f85319cd-c41d-482a-83f9-185e752b6d2a",
+  "username": "newsmaker23_talk",
+  "nickname": "NEWS MAKER²³ TALK",
+  "followers": 59600,
+  "likes": 78500,
+  "videos": 135,
+  "scores": {
+    "visual": 0.7,
+    "audio": 0.7,
+    "energy": 0.4,
+    "interaction": 0.35,
+    "linguistic": 0.6,
+    "contextual": 0.35,
+    "environmental": 0.8,
+    "governance": 0.9
+  },
+  "insights": {
+    "visual": "Strong visual engagement with consistent content quality and good thumbnail optimization.",
+    "audio": "Good audio clarity, maintain consistent sound levels and music integration.",
+    "energy": "Energy levels are low. Boost your on-camera presence and content pacing.",
+    "interaction": "Interaction needs improvement. Add more questions, polls, and direct audience engagement.",
+    "linguistic": "Solid communication style, could enhance storytelling techniques and script quality.",
+    "contextual": "Content feels disconnected from current trends. Research popular topics and adapt faster.",
+    "environmental": "Well-maintained production quality with good lighting and clean backgrounds.",
+    "governance": "Excellent authenticity with organic growth patterns and genuine engagement."
+  },
+  "summary": {
+    "overall": "Excellent governance integrity (BMIL 0.9) with strong visual & audio layers. However, interaction and energy layers are low, indicating the need for higher audience connection and on-camera enthusiasm.",
+    "aiInsights": [
+      {
+        "type": "strength",
+        "title": "Exceptional Governance Performance",
+        "description": "Excellent authenticity with organic growth patterns and genuine engagement."
+      },
+      {
+        "type": "opportunity",
+        "title": "Improve Interaction",
+        "description": "Add more questions, polls, and reactive dialogue to increase ERI score."
+      }
+    ]
+  },
+  "metadata": {
+    "generated_by": "BIAS v2025.10",
+    "mode": "Audit Mode",
+    "timestamp": "2025-10-22T14:32:00Z",
+    "source": "BIAS Public Gateway (Replit Connector)"
+  }
+}
