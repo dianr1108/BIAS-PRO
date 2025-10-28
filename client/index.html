@@ -1,13 +1,120 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BIAS PRO</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <!-- PENTING: pakai path RELATIF -->
-    <script type="module" src="./src/main.tsx"></script>
-  </body>
-</html>
+// ===========================================================
+// 🌐 BIAS23 SERVER v7.0 – INSIGHT ENGINE MODE
+// ===========================================================
+import express from "express";
+import cors from "cors";
+import fs from "fs";
+import path from "path";
+import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const app = express();
+app.use(cors());
+app.use(express.json({ limit: "25mb" }));
+
+// ===========================================================
+// 📂 LOAD DATABASE
+// ===========================================================
+const dataDir = path.join(__dirname, "data");
+if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+
+const DB_FILES = {
+  accounts: path.join(dataDir, "accounts.json"),
+  ranks: path.join(dataDir, "ranks.json"),
+};
+const db = { accounts: [], ranks: [] };
+for (const k of Object.keys(DB_FILES)) {
+  try {
+    if (fs.existsSync(DB_FILES[k])) db[k] = JSON.parse(fs.readFileSync(DB_FILES[k], "utf8"));
+  } catch {}
+}
+
+// ===========================================================
+// ⚙️ CORE INSIGHT ANALYZER
+// ===========================================================
+function analyzeInsights() {
+  const ranks = db.ranks || [];
+  const accs = db.accounts || [];
+  if (ranks.length === 0 || accs.length === 0) {
+    return { status: "⚠️ Tidak ada data", insights: [] };
+  }
+
+  const insights = [];
+
+  // --- 1️⃣ Trend summary ---
+  const top5 = ranks.slice(0, 5);
+  insights.push({
+    type: "Top Performance",
+    message: `Top 5 akun paling engaging: ${top5.map(r => "@" + r.username).join(", ")}`,
+  });
+
+  // --- 2️⃣ Consistency check ---
+  for (const r of ranks) {
+    const history = accs.filter(a => a.A.username === r.username || a.B.username === r.username);
+    const avgEng = r.avgEngagement;
+    const std = Math.abs(
+      history
+        .map(a => parseFloat(a.A.username === r.username ? a.A.engagement : a.B.engagement))
+        .reduce((s, v) => s + (v - avgEng) ** 2, 0) / (history.length || 1)
+    ).toFixed(3);
+
+    let remark = "stabil";
+    if (std > 0.1) remark = "fluktuatif";
+    if (std > 0.2) remark = "tidak konsisten";
+
+    insights.push({
+      username: r.username,
+      rank: r.rank,
+      engagement: r.avgEngagement,
+      sessions: r.sessions,
+      consistency: remark,
+      note:
+        remark === "tidak konsisten"
+          ? "⚠️ Butuh perhatian: engagement terlalu berfluktuasi."
+          : remark === "fluktuatif"
+          ? "⚖️ Masih bisa distabilkan dengan konten lebih konsisten."
+          : "✅ Stabil dan sehat.",
+    });
+  }
+
+  // --- 3️⃣ General recommendation ---
+  const avgAll = ranks.reduce((s, r) => s + r.avgEngagement, 0) / ranks.length;
+  insights.push({
+    type: "Global Trend",
+    message:
+      avgAll > 0.5
+        ? "📈 Tren keseluruhan positif – rata-rata engagement tinggi."
+        : avgAll > 0.3
+        ? "⚖️ Tren netral – stabil tapi perlu variasi konten."
+        : "📉 Tren menurun – engagement kolektif menurun signifikan.",
+  });
+
+  return { status: "ok", count: insights.length, insights };
+}
+
+// ===========================================================
+// 🧭 ENDPOINTS
+// ===========================================================
+app.get("/api/insight", (req, res) => {
+  const report = analyzeInsights();
+  res.json(report);
+});
+
+// ===========================================================
+// 📂 STATIC FILES
+// ===========================================================
+app.use(express.static(path.join(__dirname, "public")));
+app.get("/insight.html", (req, res) =>
+  res.sendFile(path.join(__dirname, "public/insight.html"))
+);
+
+app.get("/", (req, res) =>
+  res.send("🔥 BIAS23 v7.0 – Insight Engine aktif dan siap analisa tren")
+);
+
+// ===========================================================
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`✅ BIAS23 Insight Engine running on port ${PORT}`));
