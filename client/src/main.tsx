@@ -1,4 +1,4 @@
-// Entry minimal supaya build sukses tanpa React.
+// Entry minimal supaya build sukses.
 const root = document.getElementById('root');
 if (root) {
   root.innerHTML = `
